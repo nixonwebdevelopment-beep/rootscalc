@@ -1,3 +1,68 @@
+// ── Build 10 input rows on load ──────────────────────────────────
+function buildRows(platform) {
+  const container = document.getElementById(`${platform}-rows`);
+  for (let i = 1; i <= 10; i++) {
+    const row = document.createElement('div');
+    row.className = 'post-row';
+    row.innerHTML = `
+      <input type="number" min="0" placeholder="0" id="${platform}-l-${i}" oninput="calcAvg('${platform}')"/>
+      <input type="number" min="0" placeholder="0" id="${platform}-c-${i}" oninput="calcAvg('${platform}')"/>
+      <input type="number" min="0" placeholder="0" id="${platform}-s-${i}" oninput="calcAvg('${platform}')"/>`;
+    container.appendChild(row);
+  }
+}
+
+buildRows('ig');
+buildRows('tt');
+
+// ── Average calculator ───────────────────────────────────────────
+function calcAvg(platform) {
+  let totalL = 0, totalC = 0, totalS = 0, count = 0;
+
+  for (let i = 1; i <= 10; i++) {
+    const l = parseFloat(document.getElementById(`${platform}-l-${i}`).value) || 0;
+    const c = parseFloat(document.getElementById(`${platform}-c-${i}`).value) || 0;
+    const s = parseFloat(document.getElementById(`${platform}-s-${i}`).value) || 0;
+    if (l || c || s) {
+      totalL += l; totalC += c; totalS += s; count++;
+    }
+  }
+
+  const avgBox = document.getElementById(`${platform}-avg`);
+  const useBtn = document.getElementById(`${platform}-use-btn`);
+
+  if (count === 0) {
+    avgBox.innerHTML = '';
+    useBtn.style.display = 'none';
+    return;
+  }
+
+  const avgL = Math.round(totalL / count);
+  const avgC = Math.round(totalC / count);
+  const avgS = Math.round(totalS / count);
+
+  avgBox.innerHTML = `
+    <div class="avg-row"><span class="avg-label">Avg likes</span><span class="avg-val">${avgL.toLocaleString()}</span></div>
+    <div class="avg-row"><span class="avg-label">Avg comments</span><span class="avg-val">${avgC.toLocaleString()}</span></div>
+    <div class="avg-row"><span class="avg-label">Avg shares</span><span class="avg-val">${avgS.toLocaleString()}</span></div>
+    <div class="avg-row"><span class="avg-label">Posts counted</span><span class="avg-val">${count}</span></div>`;
+
+  useBtn.style.display = 'block';
+  useBtn.dataset.likes = avgL;
+  useBtn.dataset.comments = avgC;
+  useBtn.dataset.shares = avgS;
+}
+
+function useAverages(platform) {
+  const btn = document.getElementById(`${platform}-use-btn`);
+  document.getElementById(`${platform}-likes`).value    = btn.dataset.likes;
+  document.getElementById(`${platform}-comments`).value = btn.dataset.comments;
+  document.getElementById(`${platform}-shares`).value   = btn.dataset.shares;
+  calc();
+  document.querySelector('.averages-section:last-of-type').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── Engagement rate calculator ───────────────────────────────────
 function val(id) {
   return parseFloat(document.getElementById(id).value) || 0;
 }
@@ -29,8 +94,8 @@ function calc() {
   }
 
   const maxRate = Math.max(igRate ?? 0, ttRate ?? 0);
-  const igBarW = maxRate > 0 && igRate !== null ? Math.round((igRate / maxRate) * 100) : 0;
-  const ttBarW = maxRate > 0 && ttRate !== null ? Math.round((ttRate / maxRate) * 100) : 0;
+  const igBarW  = maxRate > 0 && igRate !== null ? Math.round((igRate / maxRate) * 100) : 0;
+  const ttBarW  = maxRate > 0 && ttRate !== null ? Math.round((ttRate / maxRate) * 100) : 0;
 
   let verdictHtml = '';
   if (igRate !== null && ttRate !== null) {
@@ -70,91 +135,5 @@ function calc() {
         <span class="bar-val">${ttRate !== null ? ttRate.toFixed(2) + '%' : '—'}</span>
       </div>
     </div>
-    ${verdictHtml}
-  `;
-}
-
-// ── Average calculator ──────────────────────────────────────────
-
-const postCounts = { ig: 0, tt: 0 };
-
-function addPost(platform) {
-  const container = document.getElementById(`${platform}-posts`);
-  const id = ++postCounts[platform];
-
-  if (id === 1) {
-    const labels = document.createElement('div');
-    labels.className = 'col-labels';
-    labels.id = `${platform}-col-labels`;
-    labels.innerHTML = `
-      <span class="col-label">Likes</span>
-      <span class="col-label">Comments</span>
-      <span class="col-label">Shares</span>
-      <span></span>`;
-    container.before(labels);
-  }
-
-  const row = document.createElement('div');
-  row.className = 'post-row';
-  row.id = `${platform}-post-${id}`;
-  row.innerHTML = `
-    <input type="number" min="0" placeholder="Likes"    id="${platform}-l-${id}" oninput="calcAvg('${platform}')"/>
-    <input type="number" min="0" placeholder="Comments" id="${platform}-c-${id}" oninput="calcAvg('${platform}')"/>
-    <input type="number" min="0" placeholder="Shares"   id="${platform}-s-${id}" oninput="calcAvg('${platform}')"/>
-    <button class="remove-btn" onclick="removePost('${platform}', ${id})" aria-label="Remove row">×</button>`;
-  container.appendChild(row);
-  calcAvg(platform);
-}
-
-function removePost(platform, id) {
-  const row = document.getElementById(`${platform}-post-${id}`);
-  if (row) row.remove();
-  const labels = document.getElementById(`${platform}-col-labels`);
-  const container = document.getElementById(`${platform}-posts`);
-  if (labels && container.children.length === 0) labels.remove();
-  calcAvg(platform);
-}
-
-function calcAvg(platform) {
-  const container = document.getElementById(`${platform}-posts`);
-  const rows = container.querySelectorAll('.post-row');
-  const avgBox = document.getElementById(`${platform}-avg`);
-
-  let totalL = 0, totalC = 0, totalS = 0, count = 0;
-
-  rows.forEach(row => {
-    const inputs = row.querySelectorAll('input');
-    const l = parseFloat(inputs[0].value) || 0;
-    const c = parseFloat(inputs[1].value) || 0;
-    const s = parseFloat(inputs[2].value) || 0;
-    if (l || c || s) {
-      totalL += l; totalC += c; totalS += s; count++;
-    }
-  });
-
-  if (count === 0) {
-    avgBox.classList.remove('visible');
-    avgBox.innerHTML = '';
-    return;
-  }
-
-  const avgL = Math.round(totalL / count);
-  const avgC = Math.round(totalC / count);
-  const avgS = Math.round(totalS / count);
-
-  avgBox.classList.add('visible');
-  avgBox.innerHTML = `
-    <div class="avg-row"><span class="avg-label">Avg likes</span><span class="avg-val">${avgL.toLocaleString()}</span></div>
-    <div class="avg-row"><span class="avg-label">Avg comments</span><span class="avg-val">${avgC.toLocaleString()}</span></div>
-    <div class="avg-row"><span class="avg-label">Avg shares</span><span class="avg-val">${avgS.toLocaleString()}</span></div>
-    <div class="avg-row"><span class="avg-label">Posts counted</span><span class="avg-val">${count}</span></div>
-    <button class="use-btn" onclick="useAverages('${platform}', ${avgL}, ${avgC}, ${avgS})">Use these averages ↑</button>`;
-}
-
-function useAverages(platform, likes, comments, shares) {
-  document.getElementById(`${platform}-likes`).value   = likes;
-  document.getElementById(`${platform}-comments`).value = comments;
-  document.getElementById(`${platform}-shares`).value  = shares;
-  calc();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+    ${verdictHtml}`;
 }
