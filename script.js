@@ -12,8 +12,10 @@ function buildRows(platform) {
   }
 }
 
-buildRows('ig');
-buildRows('tt');
+document.addEventListener('DOMContentLoaded', function() {
+  buildRows('ig');
+  buildRows('tt');
+});
 
 // ── Average calculator ───────────────────────────────────────────
 function calcAvg(platform) {
