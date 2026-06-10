@@ -14,62 +14,80 @@
   </header>
 
   <main>
-    <div class="platform-grid">
 
-      <div class="platform-card">
-        <div class="platform-header ig">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          Instagram
-        </div>
-        <label>Followers<input type="number" id="ig-followers" placeholder="e.g. 50000" min="0" oninput="calc()"/></label>
-        <label>Avg likes per post<input type="number" id="ig-likes" placeholder="e.g. 2000" min="0" oninput="calc()"/></label>
-        <label>Avg comments per post<input type="number" id="ig-comments" placeholder="e.g. 80" min="0" oninput="calc()"/></label>
-        <label>Avg shares per post<input type="number" id="ig-shares" placeholder="e.g. 40" min="0" oninput="calc()"/></label>
-      </div>
-
-      <div class="platform-card">
-        <div class="platform-header tt">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
-          TikTok
-        </div>
-        <label>Followers<input type="number" id="tt-followers" placeholder="e.g. 80000" min="0" oninput="calc()"/></label>
-        <label>Avg likes per video<input type="number" id="tt-likes" placeholder="e.g. 5000" min="0" oninput="calc()"/></label>
-        <label>Avg comments per video<input type="number" id="tt-comments" placeholder="e.g. 150" min="0" oninput="calc()"/></label>
-        <label>Avg shares per video<input type="number" id="tt-shares" placeholder="e.g. 300" min="0" oninput="calc()"/></label>
-      </div>
-
-    </div>
-
-    <div class="results" id="results">
-      <p class="empty">Fill in followers and at least one engagement metric to see results.</p>
-    </div>
-
+    <!-- Average calculator -->
     <div class="averages-section">
-      <h2>Average calculator</h2>
-      <p class="section-sub">Enter multiple posts to calculate your averages, then use them above.</p>
+      <h2>Step 1 — calculate your averages</h2>
+      <p class="section-sub">Enter likes, comments and shares for up to 10 posts per platform.</p>
 
       <div class="platform-grid">
 
         <div class="platform-card">
           <div class="platform-header ig">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-            Instagram posts
+            Instagram
           </div>
-          <div id="ig-posts"></div>
-          <button class="add-btn" onclick="addPost('ig')">+ Add post</button>
+          <div class="col-labels">
+            <span class="col-label">Likes</span>
+            <span class="col-label">Comments</span>
+            <span class="col-label">Shares</span>
+          </div>
+          <div id="ig-rows"></div>
           <div class="avg-result" id="ig-avg"></div>
+          <button class="use-btn" id="ig-use-btn" style="display:none" onclick="useAverages('ig')">Use these averages ↓</button>
         </div>
 
         <div class="platform-card">
           <div class="platform-header tt">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
-            TikTok videos
+            TikTok
           </div>
-          <div id="tt-posts"></div>
-          <button class="add-btn" onclick="addPost('tt')">+ Add video</button>
+          <div class="col-labels">
+            <span class="col-label">Likes</span>
+            <span class="col-label">Comments</span>
+            <span class="col-label">Shares</span>
+          </div>
+          <div id="tt-rows"></div>
           <div class="avg-result" id="tt-avg"></div>
+          <button class="use-btn" id="tt-use-btn" style="display:none" onclick="useAverages('tt')">Use these averages ↓</button>
         </div>
 
+      </div>
+    </div>
+
+    <!-- Engagement rate calculator -->
+    <div class="averages-section">
+      <h2>Step 2 — calculate engagement rate</h2>
+      <p class="section-sub">Enter your follower count and average engagement per post.</p>
+
+      <div class="platform-grid">
+
+        <div class="platform-card">
+          <div class="platform-header ig">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            Instagram
+          </div>
+          <label>Followers<input type="number" id="ig-followers" placeholder="e.g. 50000" min="0" oninput="calc()"/></label>
+          <label>Avg likes per post<input type="number" id="ig-likes" placeholder="e.g. 2000" min="0" oninput="calc()"/></label>
+          <label>Avg comments per post<input type="number" id="ig-comments" placeholder="e.g. 80" min="0" oninput="calc()"/></label>
+          <label>Avg shares per post<input type="number" id="ig-shares" placeholder="e.g. 40" min="0" oninput="calc()"/></label>
+        </div>
+
+        <div class="platform-card">
+          <div class="platform-header tt">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+            TikTok
+          </div>
+          <label>Followers<input type="number" id="tt-followers" placeholder="e.g. 80000" min="0" oninput="calc()"/></label>
+          <label>Avg likes per video<input type="number" id="tt-likes" placeholder="e.g. 5000" min="0" oninput="calc()"/></label>
+          <label>Avg comments per video<input type="number" id="tt-comments" placeholder="e.g. 150" min="0" oninput="calc()"/></label>
+          <label>Avg shares per video<input type="number" id="tt-shares" placeholder="e.g. 300" min="0" oninput="calc()"/></label>
+        </div>
+
+      </div>
+
+      <div class="results" id="results">
+        <p class="empty">Fill in followers and at least one engagement metric to see results.</p>
       </div>
     </div>
 
