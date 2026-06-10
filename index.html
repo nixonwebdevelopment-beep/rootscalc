@@ -43,6 +43,36 @@
     <div class="results" id="results">
       <p class="empty">Fill in followers and at least one engagement metric to see results.</p>
     </div>
+
+    <div class="averages-section">
+      <h2>Average calculator</h2>
+      <p class="section-sub">Enter multiple posts to calculate your averages, then use them above.</p>
+
+      <div class="platform-grid">
+
+        <div class="platform-card">
+          <div class="platform-header ig">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            Instagram posts
+          </div>
+          <div id="ig-posts"></div>
+          <button class="add-btn" onclick="addPost('ig')">+ Add post</button>
+          <div class="avg-result" id="ig-avg"></div>
+        </div>
+
+        <div class="platform-card">
+          <div class="platform-header tt">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+            TikTok videos
+          </div>
+          <div id="tt-posts"></div>
+          <button class="add-btn" onclick="addPost('tt')">+ Add video</button>
+          <div class="avg-result" id="tt-avg"></div>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 
   <script src="script.js"></script>
