@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Engagement Rate Calculator</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <header>
+    <h1>Engagement Rate Calculator</h1>
+    <p class="subtitle">Instagram &amp; TikTok</p>
+  </header>
+
+  <main>
+    <div class="platform-grid">
+
+      <div class="platform-card">
+        <div class="platform-header ig">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          Instagram
+        </div>
+        <label>Followers<input type="number" id="ig-followers" placeholder="e.g. 50000" min="0" oninput="calc()"/></label>
+        <label>Avg likes per post<input type="number" id="ig-likes" placeholder="e.g. 2000" min="0" oninput="calc()"/></label>
+        <label>Avg comments per post<input type="number" id="ig-comments" placeholder="e.g. 80" min="0" oninput="calc()"/></label>
+        <label>Avg shares per post<input type="number" id="ig-shares" placeholder="e.g. 40" min="0" oninput="calc()"/></label>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-header tt">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          TikTok
+        </div>
+        <label>Followers<input type="number" id="tt-followers" placeholder="e.g. 80000" min="0" oninput="calc()"/></label>
+        <label>Avg likes per video<input type="number" id="tt-likes" placeholder="e.g. 5000" min="0" oninput="calc()"/></label>
+        <label>Avg comments per video<input type="number" id="tt-comments" placeholder="e.g. 150" min="0" oninput="calc()"/></label>
+        <label>Avg shares per video<input type="number" id="tt-shares" placeholder="e.g. 300" min="0" oninput="calc()"/></label>
+      </div>
+
+    </div>
+
+    <div class="results" id="results">
+      <p class="empty">Fill in followers and at least one engagement metric to see results.</p>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
